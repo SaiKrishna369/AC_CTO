@@ -32,8 +32,8 @@ for _ep in range(MAX_EPISODES):
 	while True:
 		#env.render()
 				
-		action = trainer.getAction(state)
-		new_state, reward, done, info = env.step(action)
+		action = trainer.getAction(state).clone()
+		new_state, reward, done, info = env.step(action.data.numpy())
 		
 		new_state = np.float32(new_state).flatten()
 		rew = np.array(reward, dtype=np.float32)
