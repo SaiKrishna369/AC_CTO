@@ -35,8 +35,8 @@ class Actor(nn.Module):
 		self.fc1 = nn.Linear(state_dim, action_dim, bias=False)
 		self.fc1.weight.data = fanin_init(self.fc1.weight.data.size())
 
-		self.variance1 = np.random.random()
-		self.variance2 = np.random.random()
+		self.variance1 = nn.Parameter(torch.tensor(np.random.random()))
+		self.variance2 = nn.Parameter(torch.tensor(np.random.random()))
 
 	def forward(self, state):
 		x = self.fc1(state)

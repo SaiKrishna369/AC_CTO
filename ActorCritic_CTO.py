@@ -9,7 +9,7 @@ import train
 
 env = gym.make('CTO-v0')
 
-MAX_EPISODES = 5000
+MAX_EPISODES = 50000
 
 NUM_TARGETS = 10
 SENSOR_RANGE = 15
@@ -33,17 +33,16 @@ for _ep in range(MAX_EPISODES):
 		#env.render()
 				
 		action = trainer.getAction(state)
-
 		new_state, reward, done, info = env.step(action)
-
-		if done:
-			break
 		
 		new_state = np.float32(new_state).flatten()
 		rew = np.array(reward, dtype=np.float32)
 		if reward != 0:
 			trainer.update(state, action, rew, new_state)
 		state = new_state
+
+		if done:
+			break
 
 	if _ep%100 == 0:
 		trainer.save_models(_ep)

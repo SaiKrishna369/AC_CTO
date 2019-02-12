@@ -32,13 +32,13 @@ class Trainer:
 		return torch.tensor([ (self.gridWidth*1.0)/(1.0 + math.e**-val[0]), (self.gridHeight*1.0)/(1.0 + math.e**-val[1]) ])
 
 	def getVariance(self):
-		var1 = 1.0/(1 + math.e**(-self.actor.variance1))
-		var2 = 1.0/(1 + math.e**(-self.actor.variance2))
+		var1 = 1.0/(1 + math.e**(-self.actor.variance1)) + 1e-3
+		var2 = 1.0/(1 + math.e**(-self.actor.variance2)) + 1e-3
 		return torch.tensor([[var1**2, 0.0],[0.0, var2**2]])
 
 	def getAction(self, state):
 		state = Variable(torch.from_numpy(state))
-		temp = self.actor.forward(state).detach()
+		temp = self.actor.forward(state)
 
 		self.normal_distribution = MultivariateNormal(self.getMean(temp), self.getVariance())
 		action = self.normal_distribution.sample()
@@ -71,7 +71,7 @@ class Trainer:
 		td_error = td_target - value_estimate
 		actor_loss = -1 * self.normal_distribution.log_prob(a1) * td_error
 		self.actor_optimizer.zero_grad()
-		actor_loss.backward(retain_graph=True)
+		actor_loss.backward()
 		self.actor_optimizer.step()
 
 
