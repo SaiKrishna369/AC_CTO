@@ -9,26 +9,25 @@ import train
 
 env = gym.make('CTO-v0')
 
-MAX_EPISODES = 50000
+MAX_EPISODES = 100000
 
 NUM_TARGETS = 10
 SENSOR_RANGE = 15
-GRID_WIDTH = 150.0
-GRID_HEIGHT = 150.0
+GRID_DIMENSION = [150.0, 150.0]
 
 S_DIM = 2*NUM_TARGETS
 A_DIM = 2
 
-trainer = train.Trainer(S_DIM, A_DIM, GRID_WIDTH, GRID_HEIGHT)
+trainer = train.Trainer(S_DIM, A_DIM, GRID_DIMENSION)
 
 for _ep in range(MAX_EPISODES):
 	#Reset environment
-	env.initialize(targets=NUM_TARGETS, sensorRange=SENSOR_RANGE, gridWidth=GRID_WIDTH, gridHeight=GRID_HEIGHT)
+	env.initialize(targets=NUM_TARGETS, sensorRange=SENSOR_RANGE, gridWidth=GRID_DIMENSION[0], gridHeight=GRID_DIMENSION[1])
 	
 	observation = env.reset()
 	state = np.float32(observation).flatten()
 
-	print 'EPISODE :- ' +  str(_ep)
+	print 'EPISODE :- ', _ep
 	while True:
 		#env.render()
 				
@@ -38,7 +37,7 @@ for _ep in range(MAX_EPISODES):
 		new_state = np.float32(new_state).flatten()
 		rew = np.array(reward, dtype=np.float32)
 		if reward != 0:
-			trainer.update(state, action, rew, new_state)
+			trainer.update(state, rew, new_state)
 		state = new_state
 
 		if done:
