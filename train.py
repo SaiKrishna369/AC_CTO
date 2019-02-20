@@ -38,8 +38,8 @@ class Trainer:
 	# 	return mean
 
 	def getVariance(self):
-		var1 = 1.0/(1 + torch.exp(-self.actor.variance1)) + 1e-3
-		var2 = 1.0/(1 + torch.exp(-self.actor.variance2)) + 1e-3
+		var1 = 1.0/(1 + torch.exp( torch.clamp(-self.actor.variance1, min=-10, max=10) ) ) + 1e-3
+		var2 = 1.0/(1 + torch.exp( torch.clamp(-self.actor.variance1, min=-10, max=10) ) ) + 1e-3
 		
 		variance = torch.zeros(2, 2)
 		variance[0][0] = var1**2
@@ -80,13 +80,15 @@ class Trainer:
 		actor_loss = -td_error * self.normal_distribution.log_prob(self.action)
 		self.actor_optimizer.zero_grad()
 		actor_loss.backward()
-		#print "\n\n"
-		#print "Actor loss: ", actor_loss
-		#print "Mean grads: ", self.actor.fc1.weight.grad
-		#print "Vaiance grads: ", self.actor.variance1.grad, self.actor.variance2.grad
-		#print "\n\n"
-		#print "action: ", self.action
-		#print self.temp, self.temp.grad, "\n\n"
+		# print "\n\n"
+		# print "Actor loss: ", actor_loss
+		# print "Mean grads: ", self.actor.hidden1.weight.grad, self.actor.output.weight.grad
+		# print "Vaiance grads: ", self.actor.variance1.grad, self.actor.variance2.grad
+		# print "\nCritic loss: ", critic_loss
+		# print "Critic grads: ", self.critic.hidden1.weight.grad, self.critic.output.weight.grad
+		# print "\n\n"		
+		# print "action: ", self.action
+		# print self.temp, self.temp.grad, "\n\n"
 		self.actor_optimizer.step()
 
 

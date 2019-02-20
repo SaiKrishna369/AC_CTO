@@ -15,19 +15,23 @@ class Critic(nn.Module):
 
 		self.state_dim = state_dim
 
-		self.fc1 = nn.Linear(state_dim,1, bias=False)
-		self.fc1.weight.data = fanin_init(self.fc1.weight.data.size())
+		self.hidden1 = nn.Linear(state_dim,64, bias=False)
+		self.hidden1.weight.data = fanin_init(self.hidden1.weight.data.size())
+
+		self.output = nn.Linear(64,1, bias=False)
+		self.output.weight.data = fanin_init(self.output.weight.data.size())
 
 	def forward(self, state):
-		x = (self.fc1(state))
+		h1 = self.hidden1(state)
+		o = self.output(h1)
 
-		return x
+		return o
 
 
 class Actor(nn.Module):
 
 	def mean_activation(self, x):
-		return (self.gridDimension)/(1.0 + torch.exp(-torch.clamp(x, min = -64, max = 64)))
+		return (self.gridDimension)/(1.0 + torch.exp( torch.clamp(-x, min=-64, max=64) ))
 
 	def __init__(self, state_dim, action_dim, gridDimension):
 		super(Actor, self).__init__()
@@ -35,8 +39,11 @@ class Actor(nn.Module):
 		self.state_dim = state_dim
 		self.action_dim = action_dim
 
-		self.fc1 = nn.Linear(state_dim, action_dim, bias=False)
-		self.fc1.weight.data = fanin_init(self.fc1.weight.data.size())
+		self.hidden1 = nn.Linear(state_dim, 64, bias=False)
+		self.hidden1.weight.data = fanin_init(self.hidden1.weight.data.size())
+
+		self.output = nn.Linear(64, action_dim, bias=False)
+		self.output.weight.data = fanin_init(self.output.weight.data.size())
 
 		self.variance1 = nn.Parameter(torch.tensor(np.random.random()))
 		self.variance2 = nn.Parameter(torch.tensor(np.random.random()))
@@ -44,6 +51,7 @@ class Actor(nn.Module):
 		self.gridDimension = torch.tensor(gridDimension)
 
 	def forward(self, state):
-		x = self.mean_activation(self.fc1(state))
+		h1 = torch.tanh(self.hidden1(state))
+		o = self.mean_activation(self.output(h1))
 
-		return x
+		return o
