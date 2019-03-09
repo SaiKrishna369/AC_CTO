@@ -1,0 +1,6 @@
+*.pyc
+*/Models/
+.vscode/
+*/Examples/
+*/Scraped/
+*/temp/
