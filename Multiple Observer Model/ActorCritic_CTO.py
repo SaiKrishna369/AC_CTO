@@ -73,8 +73,8 @@ if __name__ == "__main__":
 			for i in xrange(NUM_AGENTS):
 				trainer[i].update(state[i], rew[i], new_state[i])
 
-		for i in xrange(NUM_AGENTS):
-			if _ep%100 == 0:
+		if _ep%100 == 0:
+			for i in xrange(NUM_AGENTS):			
 				trainer[i].save_models(i, _ep)
 
 
