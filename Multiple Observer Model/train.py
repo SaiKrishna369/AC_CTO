@@ -92,12 +92,12 @@ class Trainer:
 		self.actor_optimizer.step()
 
 
-	def save_models(self, episode_count):
-		torch.save(self.actor.state_dict(), './Models/' + str(episode_count) + '_actor.pt')
-		torch.save(self.critic.state_dict(), './Models/' + str(episode_count) + '_critic.pt')
-		print 'Models saved successfully'
+	def save_models(self, agent, episode_count):
+		torch.save(self.actor.state_dict(), './Models/' + str(agent) + '/' + str(episode_count) + '_' + str(agent) + '_actor.pt')
+		torch.save(self.critic.state_dict(), './Models/' + str(agent) + '/' + str(episode_count) + '_' + str(agent) + '_critic.pt')
+		print 'Successfully saved models for agent', agent
 
-	def load_models(self, episode):
-		self.actor.load_state_dict(torch.load('./Models/' + str(episode) + '_actor.pt'))
-		self.critic.load_state_dict(torch.load('./Models/' + str(episode) + '_critic.pt'))
-		print 'Models loaded succesfully'
+	def load_models(self, agent, episode):
+		self.actor.load_state_dict(torch.load('./Models/' + str(agent) + '/' + str(episode) + '_' + str(agent) + '_actor.pt'))
+		self.critic.load_state_dict(torch.load('./Models/' + str(agent) + '/' + str(episode) + '_' + str(agent) + '_critic.pt'))
+		print 'Succesfully loaded models of agent', agent

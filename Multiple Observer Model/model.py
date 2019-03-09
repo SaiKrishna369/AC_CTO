@@ -15,10 +15,10 @@ class Critic(nn.Module):
 
 		self.state_dim = state_dim
 
-		self.hidden1 = nn.Linear(state_dim,64, bias=False)
+		self.hidden1 = nn.Linear(state_dim, 128, bias=False)
 		self.hidden1.weight.data = fanin_init(self.hidden1.weight.data.size())
 
-		self.output = nn.Linear(64,1, bias=False)
+		self.output = nn.Linear(128, 1, bias=False)
 		self.output.weight.data = fanin_init(self.output.weight.data.size())
 
 	def forward(self, state):
@@ -39,10 +39,10 @@ class Actor(nn.Module):
 		self.state_dim = state_dim
 		self.action_dim = action_dim
 
-		self.hidden1 = nn.Linear(state_dim, 64, bias=False)
+		self.hidden1 = nn.Linear(state_dim, 128, bias=False)
 		self.hidden1.weight.data = fanin_init(self.hidden1.weight.data.size())
 
-		self.output = nn.Linear(64, action_dim, bias=False)
+		self.output = nn.Linear(128, action_dim, bias=False)
 		self.output.weight.data = fanin_init(self.output.weight.data.size())
 
 		self.variance1 = nn.Parameter(torch.tensor(np.random.random()))

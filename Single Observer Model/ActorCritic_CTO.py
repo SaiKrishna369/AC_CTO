@@ -12,7 +12,7 @@ env = gym.make('CTO-v0')
 MAX_EPISODES = 75001
 
 NUM_TARGETS = 10
-SENSOR_RANGE = 107
+SENSOR_RANGE = 15
 GRID_DIMENSION = [150.0, 150.0]
 
 S_DIM = 2*NUM_TARGETS
@@ -32,16 +32,16 @@ for _ep in range(MAX_EPISODES):
 	print 'EPISODE :- ', _ep
 	#total_reward = 0.0
 	while True:
-		#env.render()
+		env.render()
 				
 		action = trainer.getAction(state).clone()
 		new_state, reward, done, info = env.step(action.data.numpy())
 		
 		new_state = np.float32(new_state/GRID_DIMENSION).flatten()
 		rew = np.array(reward, dtype=np.float32)
+
 		#total_reward += reward
-		if reward != 0:
-			trainer.update(state, rew, new_state)
+		trainer.update(state, rew, new_state)
 		state = new_state
 
 		if done:
