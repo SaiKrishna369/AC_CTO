@@ -9,7 +9,7 @@ import math
 
 import model
 
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.0001
 GAMMA = 0.95
 
 class Trainer:
