@@ -55,7 +55,7 @@ class Actor(nn.Module):
 		self.variance1 = nn.Parameter(torch.tensor(np.random.random()))
 		self.variance2 = nn.Parameter(torch.tensor(np.random.random()))
 
-		self.gridDimension = torch.tensor(gridDimension)
+		self.gridDimension = torch.tensor(gridDimension).cuda()
 
 	def forward(self, state):
 		h1 = torch.sigmoid(self.hidden1(state))

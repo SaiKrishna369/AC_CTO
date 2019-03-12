@@ -39,9 +39,8 @@ for _ep in range(MAX_EPISODES):
 		new_state, reward, done, info = env.step(action)
 		
 		new_state = new_state.view(-1) #flatten
-		rew = np.array(reward, dtype=np.float32)
 
-		trainer.update(rew, new_state)
+		trainer.update(reward, new_state)
 		state = new_state
 
 	if _ep%100 == 0:
